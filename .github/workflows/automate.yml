@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ master ]
   schedule:
-    - cron:  '0 2 * * *'
+    - cron:  '35 3 * * *'
   workflow_dispatch:
 
 jobs:
@@ -24,6 +24,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install easyocr pillow numpy
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      
+      - name: Random sleep
+        if: github.event_name == 'schedule'
+        run: sleep $(shuf -i 10-120 -n 1)
     
       - name: run
         run: STD_ID=${{ secrets.STD_ID }} PASSWORD=${{ secrets.PASSWORD }} python3 main.py
